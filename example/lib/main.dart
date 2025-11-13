@@ -172,15 +172,79 @@ class _InfoPopupPageState extends State<InfoPopupPage> {
                 child: const Text('List Example'),
               ),
               const SizedBox(height: 30),
-              const InfoPopupWidget(
-                enableHighlight: true,
-                contentTitle: 'This is a HighLighted Info Popup',
-                child: Text('HighLighted Info Popup Example'),
+              ControllerWrapper(
+                builder: (
+                  BuildContext context,
+                  void Function(InfoPopupController) onControllerCreated,
+                  InfoPopupController? controller,
+                ) {
+                  return Column(
+                    children: <Widget>[
+                      InfoPopupWidget(
+                        enableHighlight: true,
+                        highLightTheme: HighLightTheme(
+                          radius: BorderRadius.circular(4),
+                          backgroundColor: Colors.black.withAlpha(200),
+                        ),
+                        enableHoverOnWeb: false,
+                        dismissTriggerBehavior:
+                            PopupDismissTriggerBehavior.anyWhere,
+                        contentTitle: 'This is a HighLighted Info Popup',
+                        onControllerCreated: onControllerCreated,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            debugPrint('onPressed');
+                          },
+                          child: const Text('HighLighted Info Popup Example'),
+                        ),
+                      ),
+                      const SizedBox(height: 64),
+                      ElevatedButton(
+                        onPressed: () {
+                          controller?.show();
+                        },
+                        child: const Text('Show Popup Programmatically'),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ControllerWrapper extends StatefulWidget {
+  const ControllerWrapper({super.key, required this.builder});
+
+  final Widget Function(
+    BuildContext context,
+    void Function(InfoPopupController) onControllerCreated,
+    InfoPopupController? controller,
+  ) builder;
+
+  @override
+  State<ControllerWrapper> createState() => _ControllerWrapperState();
+}
+
+class _ControllerWrapperState extends State<ControllerWrapper> {
+  InfoPopupController? _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    void onControllerCreated(InfoPopupController controller) {
+      setState(() {
+        _controller = controller;
+      });
+    }
+
+    return widget.builder(
+      context,
+      onControllerCreated,
+      _controller,
     );
   }
 }

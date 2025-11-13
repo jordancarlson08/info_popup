@@ -4,7 +4,6 @@ analyzer:
     missing_return: warning
     todo: ignore
     deprecated_member_use_from_same_package: ignore
-    sdk_version_async_exported_from_core: ignore
     unnecessary_null_comparison: ignore
     always_require_non_null_named_parameters: false
   exclude:
@@ -19,7 +18,6 @@ linter:
   rules:
     - always_declare_return_types
     - always_put_control_body_on_new_line
-    - always_require_non_null_named_parameters
     - always_specify_types
     - annotate_overrides
     - avoid_bool_literals_in_conditional_expressions
@@ -37,7 +35,6 @@ linter:
     - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null_for_future
     - avoid_returning_null_for_void
     - avoid_setters_without_getters
     - avoid_shadowing_type_parameters
@@ -80,7 +77,6 @@ linter:
     - null_check_on_nullable_type_parameter
     - null_closures
     - overridden_fields
-    - package_api_docs
     - package_names
     - package_prefixed_library_names
     - prefer_adjacent_string_concatenation
@@ -141,7 +137,6 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unrelated_type_equality_checks
-    - unsafe_html
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
     - use_if_null_to_convert_nulls_to_bools

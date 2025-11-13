@@ -18,7 +18,7 @@ class HighLightTheme {
 
   /// Default [HighLightTheme].
   factory HighLightTheme.defaultTheme() => HighLightTheme(
-        backgroundColor: Colors.black.withOpacity(.5),
+        backgroundColor: Colors.black.withValues(alpha: .5),
       );
 
   /// The [radius] of the highlighter.

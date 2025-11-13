@@ -27,6 +27,7 @@ class InfoPopupWidget extends StatefulWidget {
     this.highLightTheme,
     this.enableLog = false,
     this.enabledAutomaticConstraint = true,
+    this.enableHoverOnWeb = true,
     super.key,
   }) : assert(customContent == null || contentTitle == null,
             'You can not use both customContent and contentTitle at the same time.');
@@ -96,6 +97,12 @@ class InfoPopupWidget extends StatefulWidget {
   /// whether the popup will be constrained automatically or not.
   final bool enabledAutomaticConstraint;
 
+  /// The [enableHoverOnWeb] is the boolean value that indicates whether the
+  /// popup should be triggered on hover (typically on web/desktop platforms
+  /// with a mouse). If set to false, the popup will only be triggered by
+  /// tap or long press based on [popupClickTriggerBehavior].
+  final bool enableHoverOnWeb;
+
   @override
   State<InfoPopupWidget> createState() => _InfoPopupWidgetState();
 }
@@ -118,7 +125,9 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
     final bool mouseIsConnected =
         RendererBinding.instance.mouseTracker.mouseIsConnected;
 
-    if (!mouseIsConnected || !_isControllerInitialized) {
+    if (!widget.enableHoverOnWeb ||
+        !mouseIsConnected ||
+        !_isControllerInitialized) {
       return false;
     }
 
@@ -138,7 +147,8 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
         oldWidget.contentMaxWidth != widget.contentMaxWidth ||
         oldWidget.enableHighlight != widget.enableHighlight ||
         oldWidget.highLightTheme != widget.highLightTheme ||
-        oldWidget.dismissTriggerBehavior != widget.dismissTriggerBehavior) {
+        oldWidget.dismissTriggerBehavior != widget.dismissTriggerBehavior ||
+        oldWidget.enableHoverOnWeb != widget.enableHoverOnWeb) {
       if (_infoPopupController != null || _isControllerInitialized) {
         _infoPopupController!.dismissInfoPopup();
         _infoPopupController = null;
@@ -160,14 +170,8 @@ class _InfoPopupWidgetState extends State<InfoPopupWidget> {
         }
       },
       onExit: (PointerExitEvent event) {
-        if (widget.dismissTriggerBehavior ==
-            PopupDismissTriggerBehavior.manuel) {
-          return;
-        }
-
-        if (_isMouseRegionPermitted && _infoPopupController!.isShowing) {
-          _infoPopupController!.dismissInfoPopup();
-        }
+        // Don't auto-dismiss on mouse exit - let dismissTriggerBehavior handle dismissal
+        // This ensures tap-based dismiss modes (anyWhere, onTapArea, onTapContent) work correctly on web
       },
       child: GestureDetector(
         onTap: _behaviour(),

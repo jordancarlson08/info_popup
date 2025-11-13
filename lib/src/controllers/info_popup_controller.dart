@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:info_popup/info_popup.dart';
 import 'package:info_popup/src/extensions/context_extensions.dart';
 

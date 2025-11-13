@@ -76,21 +76,13 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     super.initState();
   }
 
-  bool _isPointListenerDisposed = false;
-
   void _handlePointerEvent(PointerEvent event) {
     if (!mounted) {
       return;
     }
 
-    final bool mouseIsConnected =
-        RendererBinding.instance.mouseTracker.mouseIsConnected;
-
-    if (mouseIsConnected) {
-      GestureBinding.instance.pointerRouter.removeGlobalRoute(
-        _handlePointerEvent,
-      );
-      _isPointListenerDisposed = true;
+    // Only handle pointer down events (actual clicks/taps)
+    if (event is! PointerDownEvent) {
       return;
     }
 
@@ -138,11 +130,9 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   @override
   void dispose() {
-    if (!_isPointListenerDisposed) {
-      GestureBinding.instance.pointerRouter.removeGlobalRoute(
-        _handlePointerEvent,
-      );
-    }
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(
+      _handlePointerEvent,
+    );
 
     super.dispose();
   }
